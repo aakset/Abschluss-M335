@@ -7,7 +7,7 @@ export default function About() {
 
       <Text className="text-white text-3xl mt-5 font-bold text-center">About Aakash</Text>
 
-      <Text className="text-white text-lg w-5/6 text-center mt-5 text-justify p-3">
+      <Text className="text-white text-lg w-5/6 text-center mt-5 p-3">
         Aakash is a dedicated student working in the IT field and also a
         passionate musician. With a keen interest in technology and music,
         Aakash balances both pursuits, continuously learning and growing in each
