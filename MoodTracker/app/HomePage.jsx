@@ -11,6 +11,11 @@ export default function Home() {
     setSelfiePage(true);
   };
   
+  const completeStep2 = () => {
+    setSelfiePage(false);
+    seetResultPage(true);
+  };
+
   return (
     <View className="flex-1 items-center justify-center bg-[#00336E]">
       <Text className="text-white text-3xl font-bold text-center">SMILE</Text>
@@ -34,14 +39,6 @@ export default function Home() {
               onPress={() => console.log("cry")}
             />
           </View>
-          <Pressable>
-            <Text
-              className="text-white text-3xl font-bold text-center mt-10"
-              onPress={completeStep1}
-            >
-              Next
-            </Text>
-          </Pressable>
         </View>
       )}
     </View>
