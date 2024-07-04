@@ -1,5 +1,8 @@
-import React from "react";
-import { View, Text, Pressable, Image } from "react-native";
+import React, { useRef } from "react";
+import { View, Text, Image, Pressable } from "react-native";
+import ViewShot from "react-native-view-shot";
+import * as MediaLibrary from "expo-media-library";
+import * as FileSystem from "expo-file-system";
 import EmojiImage from "../components/EmojiImage";
 import CameraComponent from "../components/CameraComponent";
 
@@ -9,7 +12,14 @@ export default function Home() {
   const [resultPage, setResultPage] = React.useState(false);
   const [selectedEmoji, setSelectedEmoji] = React.useState(null);  
   const [selfieUri, setSelfieUri] = React.useState("");
+  const viewShotRef = useRef();
 
+  const emojiSources = {
+    dropFace: require("../Emojis/dropFace.png"),
+    lessSad: require("../Emojis/lessSad.png"),
+    happy: require("../Emojis/happy.png"),
+    happier: require("../Emojis/Happier.jpeg"),
+  };
 
   const completeStep1 = (emoji) => {
     setSelectedEmoji(emoji);
@@ -23,6 +33,13 @@ export default function Home() {
     setResultPage(true);
   };
 
+  const saveScreenshot = async () => {
+    const uri = await viewShotRef.current.capture();
+    const asset = await MediaLibrary.createAssetAsync(uri);
+    await MediaLibrary.createAlbumAsync("Screenshots", asset, false);
+    alert("Screenshot saved to your gallery!");
+  };
+
   return (
     <View className="flex-1 items-center justify-center bg-[#00336E]">
       <Text className="text-white text-3xl font-bold text-center">SMILE</Text>
@@ -30,19 +47,19 @@ export default function Home() {
         <View>
           <View className="flex flex-row w-full justify-between items-center px-4 mt-10">
             <EmojiImage
-              src={require("../Emojis/dropFace.png")}
+              src={emojiSources.dropFace}
               onPress={() => completeStep1("dropFace")}
             />
             <EmojiImage
-              src={require("../Emojis/lessSad.png")}
+              src={emojiSources.lessSad}
               onPress={() => completeStep1("lessSad")}
             />
             <EmojiImage
-              src={require("../Emojis/happy.png")}
+              src={emojiSources.happy}
               onPress={() => completeStep1("happy")}
             />
             <EmojiImage
-              src={require("../Emojis/Happier.jpeg")}
+              src={emojiSources.happier}
               onPress={() => completeStep1("happier")}
             />
           </View>
@@ -53,13 +70,25 @@ export default function Home() {
         setSelfiePage(false);
       }} />}
       {resultPage && (
-        <View> 
-          <Text className="text-white text-3xl">Result Page</Text>
-          <Text className="text-white text-xl">
-            Selected Emoji: {selectedEmoji}
-          </Text>
-          <Image src={selfieUri} className="w-80 h-80" />
-        </View>
+        <ViewShot ref={viewShotRef} options={{ format: "jpg", quality: 0.9 }}>
+          <View>
+            
+            <View className="flex justify-center items-center mb-2 mt-6">
+              <EmojiImage src={emojiSources[selectedEmoji]} />
+            </View>
+            <View className="flex justify-center items-center mt-4">
+              <Image source={{ uri: selfieUri }} className="w-80 h-80" />
+            </View>
+          </View>
+        </ViewShot>
+      )}
+      {resultPage && (
+        <Pressable
+          onPress={saveScreenshot}
+          className="mt-4 bg-blue-500 px-4 py-2 rounded"
+        >
+          <Text className="text-white text-xl">Save</Text>
+        </Pressable>
       )}
     </View>
   );

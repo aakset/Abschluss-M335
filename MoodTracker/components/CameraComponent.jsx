@@ -9,6 +9,7 @@ export default function App({setSelfieUri, onDone}) {
   const [facing, setFacing] = useState("front");
   const cameraRef = useRef(); 
   const [hasCameraPermission, setHasCameraPermission] = useState()
+  const [hasMediaLibraryPermissions, setHasMediaLibraryPermissions] = useState()
   const [styleButton, setStyleButton] = useState("")
 
   useEffect(() => {
