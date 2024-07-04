@@ -23,7 +23,7 @@ export default function TabBar() {
       }}
     >
       <Tab.Screen
-        name="More"
+        name="Smiles"
         component={MainScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
