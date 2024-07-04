@@ -29,7 +29,7 @@ export default function CameraComponent({ setSelfieUri, onDone }) {
   }
 
   let takePicture = async () => {
-    Vibration.vibrate(50); // Add vibration feedback
+    Vibration.vibrate(20); 
     let options = {
       quality: 1,
       base64: true,
@@ -50,7 +50,7 @@ export default function CameraComponent({ setSelfieUri, onDone }) {
   };
 
   function toggleCameraFacing() {
-    Vibration.vibrate(50); // Add vibration feedback
+    Vibration.vibrate(20); 
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
@@ -75,7 +75,7 @@ export default function CameraComponent({ setSelfieUri, onDone }) {
         onPress={takePicture}
         onPressIn={() => {
           setStyleButton(" shadow shadow-white");
-          Vibration.vibrate(50); // Add vibration feedback
+          Vibration.vibrate(20); 
         }}
         onPressOut={() => setStyleButton("")}
       >
