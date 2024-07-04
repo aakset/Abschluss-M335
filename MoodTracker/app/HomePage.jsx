@@ -1,12 +1,15 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Image } from "react-native";
 import EmojiImage from "../components/EmojiImage";
+import CameraComponent from "../components/CameraComponent";
 
 export default function Home() {
   const [emojiPage, setEmojiPage] = React.useState(true);
   const [selfiePage, setSelfiePage] = React.useState(false);
   const [resultPage, setResultPage] = React.useState(false);
-  const [selectedEmoji, setSelectedEmoji] = React.useState(null);
+  const [selectedEmoji, setSelectedEmoji] = React.useState(null);  
+  const [selfieUri, setSelfieUri] = React.useState("");
+
 
   const completeStep1 = (emoji) => {
     setSelectedEmoji(emoji);
@@ -14,7 +17,8 @@ export default function Home() {
     setSelfiePage(true);
   };
 
-  const completeStep2 = () => {
+  const completeStep2 = (uri) => {
+    setSelfieUri(uri);
     setSelfiePage(false);
     setResultPage(true);
   };
@@ -44,18 +48,17 @@ export default function Home() {
           </View>
         </View>
       )}
-      {selfiePage && (
-        <View>
-          <Text className="text-white text-3xl">Take a Selfie</Text>
-          <Pressable onPress={completeStep2}>
-            <Text className="text-white text-xl">Next</Text>
-          </Pressable>
-        </View>
-      )}
+      {selfiePage && <CameraComponent setSelfieUri={setSelfieUri} onDone={() => {
+        setResultPage(true);
+        setSelfiePage(false);
+      }} />}
       {resultPage && (
-        <View>
+        <View> 
           <Text className="text-white text-3xl">Result Page</Text>
-          <Text className="text-white text-xl">Selected Emoji: {selectedEmoji}</Text>
+          <Text className="text-white text-xl">
+            Selected Emoji: {selectedEmoji}
+          </Text>
+          <Image src={selfieUri} className="w-80 h-80" />
         </View>
       )}
     </View>

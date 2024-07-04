@@ -4,8 +4,9 @@ import { View, Text } from "react-native";
 export default function About() {
   return (
     <View className="flex-1 items-center justify-center bg-[#00336E]">
-
-      <Text className="text-white text-3xl mt-5 font-bold text-center">About Aakash</Text>
+      <Text className="text-white text-3xl mt-5 font-bold text-center">
+        About Aakash
+      </Text>
 
       <Text className="text-white text-lg w-5/6 text-center mt-5 p-3">
         Aakash is a dedicated student working in the IT field and also a
