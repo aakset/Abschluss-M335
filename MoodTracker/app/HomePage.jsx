@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { View, Text, Image, Pressable } from "react-native";
 import ViewShot from "react-native-view-shot";
 import * as MediaLibrary from "expo-media-library";
-import * as FileSystem from "expo-file-system";
 import EmojiImage from "../components/EmojiImage";
 import CameraComponent from "../components/CameraComponent";
 
@@ -10,7 +9,7 @@ export default function Home() {
   const [emojiPage, setEmojiPage] = React.useState(true);
   const [selfiePage, setSelfiePage] = React.useState(false);
   const [resultPage, setResultPage] = React.useState(false);
-  const [selectedEmoji, setSelectedEmoji] = React.useState(null);  
+  const [selectedEmoji, setSelectedEmoji] = React.useState(null);
   const [selfieUri, setSelfieUri] = React.useState("");
   const viewShotRef = useRef();
 
@@ -65,14 +64,18 @@ export default function Home() {
           </View>
         </View>
       )}
-      {selfiePage && <CameraComponent setSelfieUri={setSelfieUri} onDone={() => {
-        setResultPage(true);
-        setSelfiePage(false);
-      }} />}
+      {selfiePage && (
+        <CameraComponent
+          setSelfieUri={setSelfieUri}
+          onDone={() => {
+            setResultPage(true);
+            setSelfiePage(false);
+          }}
+        />
+      )}
       {resultPage && (
         <ViewShot ref={viewShotRef} options={{ format: "jpg", quality: 0.9 }}>
           <View>
-            
             <View className="flex justify-center items-center mb-2 mt-6">
               <EmojiImage src={emojiSources[selectedEmoji]} />
             </View>
@@ -85,9 +88,9 @@ export default function Home() {
       {resultPage && (
         <Pressable
           onPress={saveScreenshot}
-          className="mt-4 bg-blue-500 px-4 py-2 rounded"
+          className="mt-10 px-4 py-2 rounded-lg border-2 border-white"
         >
-          <Text className="text-white text-xl">Save</Text>
+          <Text className="text-white text-xl font-bold">Save</Text>
         </Pressable>
       )}
     </View>
