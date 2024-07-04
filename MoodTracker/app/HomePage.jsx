@@ -1,17 +1,19 @@
-import React, { useRef } from "react";
-import { View, Text, Image, Pressable } from "react-native";
+import React, { useRef, useContext } from "react";
+import { View, Text, Image, Pressable, Vibration } from "react-native";
 import ViewShot from "react-native-view-shot";
 import * as MediaLibrary from "expo-media-library";
 import EmojiImage from "../components/EmojiImage";
 import CameraComponent from "../components/CameraComponent";
+import { ImageContext } from "./ImageContext"; 
 
-export default function Home() {
+export default function HomePage() {
   const [emojiPage, setEmojiPage] = React.useState(true);
   const [selfiePage, setSelfiePage] = React.useState(false);
   const [resultPage, setResultPage] = React.useState(false);
   const [selectedEmoji, setSelectedEmoji] = React.useState(null);
   const [selfieUri, setSelfieUri] = React.useState("");
   const viewShotRef = useRef();
+  const { addImage } = useContext(ImageContext); 
 
   const emojiSources = {
     dropFace: require("../Emojis/dropFace.png"),
@@ -21,6 +23,7 @@ export default function Home() {
   };
 
   const completeStep1 = (emoji) => {
+    Vibration.vibrate(20); 
     setSelectedEmoji(emoji);
     setEmojiPage(false);
     setSelfiePage(true);
@@ -33,10 +36,20 @@ export default function Home() {
   };
 
   const saveScreenshot = async () => {
+    Vibration.vibrate(20); 
     const uri = await viewShotRef.current.capture();
     const asset = await MediaLibrary.createAssetAsync(uri);
     await MediaLibrary.createAlbumAsync("Screenshots", asset, false);
-    alert("Screenshot saved to your gallery!");
+    addImage(uri); 
+    alert("Screenshot saved to your gallery and added to Smiles and Cries!");
+  };
+
+  const startAgain = () => {
+    setEmojiPage(true);
+    setSelfiePage(false);
+    setResultPage(false);
+    setSelectedEmoji(null);
+    setSelfieUri("");
   };
 
   return (
@@ -86,12 +99,21 @@ export default function Home() {
         </ViewShot>
       )}
       {resultPage && (
-        <Pressable
-          onPress={saveScreenshot}
-          className="mt-10 px-4 py-2 rounded-lg border-2 border-white"
-        >
-          <Text className="text-white text-xl font-bold">Save</Text>
-        </Pressable>
+        <View className="flex items-center mt-10">
+          <Pressable
+            onPress={saveScreenshot}
+            className="mb-4 px-4 py-2 rounded-lg border-2 border-white"
+          >
+            <Text className="text-white text-xl font-bold">Save</Text>
+          </Pressable>
+          <Pressable
+            onPress={startAgain}
+            className="px-4 py-2 rounded-lg border-2 border-white"
+            onPressIn={() => Vibration.vibrate(20)} 
+          >
+            <Text className="text-white text-xl font-bold">Start Again</Text>
+          </Pressable>
+        </View>
       )}
     </View>
   );
