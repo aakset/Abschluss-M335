@@ -1,4 +1,5 @@
 import { CameraView, Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
 import { useState, useRef, useEffect } from "react";
 import { Pressable, Text, TouchableOpacity, View, Vibration } from "react-native";
 import MaIcon from "react-native-vector-icons/MaterialIcons";
@@ -9,21 +10,25 @@ export default function CameraComponent({ setSelfieUri, onDone }) {
   const [facing, setFacing] = useState("front");
   const cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();
+  const [hasMediaPermission, setHasMediaPermission] = useState();
   const [styleButton, setStyleButton] = useState("");
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
 
   useEffect(() => {
     (async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
+      const mediaPermission = await requestPermission()
       setHasCameraPermission(cameraPermission.status === "granted");
+      setHasMediaPermission(mediaPermission.status === "granted")
     })();
   }, []);
 
-  if (hasCameraPermission === undefined) {
+  if (hasCameraPermission === undefined ||  hasMediaPermission === undefined) {
     return <Text>Requesting permissions...</Text>;
-  } else if (!hasCameraPermission) {
+  } else if (!hasCameraPermission || !hasMediaPermission) {
     return (
       <Text>
-        Permission for camera not granted. Please change this in settings.
+        Permission for camera or medialibrary not granted. Please change this in settings.
       </Text>
     );
   }
